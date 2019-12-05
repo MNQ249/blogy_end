@@ -15,9 +15,9 @@ const router = express.Router();
  */
 
 router.get('/api/articles', (req, res)=>{
-    Article.find().then((article)=>{
+    Article.find().then((articles)=>{
         // return all articles as an array
-        res.status(200).json({message: 'Get all Articles'});
+        res.status(200).json({articles: articles});
 
     })
     //catch any errors that might occur
@@ -41,7 +41,9 @@ router.get('/api/articles', (req, res)=>{
  * URI:   .......(/api/articles)
  * Description: Create a New Article
  */
-
+router.post('/api/articles', (req, res)=>{
+    Article.create(req.body.article)
+})
 
 
  /**
