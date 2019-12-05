@@ -17,7 +17,7 @@ const router = express.Router();
 router.get('/api/articles', (req, res)=>{
     Article.find().then((articles)=>{
         // return all articles as an array
-        res.status(200).json({articles: articles});
+        res.status(201).json({articles: articles});
 
     })
     //catch any errors that might occur
@@ -43,6 +43,16 @@ router.get('/api/articles', (req, res)=>{
  */
 router.post('/api/articles', (req, res)=>{
     Article.create(req.body.article)
+    //on a successful `create` action respond with 201 
+    //HTTP status and the content of the new article.
+    .then((newArticle)=>{
+        res.status(201).json({article:newArticle});
+
+    })
+    //catch any error that might occur
+    .catch((error)=>{
+        res.status(500).json({error:error});
+    })
 })
 
 
