@@ -33,6 +33,44 @@ router.get('/api/articles', (req, res)=>{
  * Description: Get an Article by Article ID
  */
 
+// router.get('/api/articles/id', (req,res)=>{
+//     Article.findById().then((article)=>{
+
+//         res.status(200).json({article:article});
+//     })
+//     .catch((error)=>{
+//         res.status(404).json({error:error});
+//     })
+// });
+
+
+router.get('/api/articles/:id', (req, res) => {
+    Article.findById(req.params.id)
+      .then((article) => {
+        if(article) {
+          
+          return article;
+        } else {
+          // If we couldn't find a document with the matching ID
+          res.status(404).json({
+            error: {
+              name: 'DocumentNotFoundError',
+              message: 'The provided ID doesn\'t match any documents'
+            }
+          });
+        }
+      })
+      .then(() => {
+        // If the article succeeded, return 204 and no JSON
+        res.status(204).end();
+      })
+      // Catch any errors that might occur
+      .catch((error) => {
+        res.status(500).json({ error: error });
+      });
+  });
+  
+
 
 
  /**
@@ -63,6 +101,31 @@ router.post('/api/articles', (req, res)=>{
  * Description: Update an Article by Article ID
  */
 
+router.patch('/api/articles/:id', (req, res) => {
+    Article.findById(req.params.id)
+      .then((article) => {
+        if(article) {
+          // Pass the result of Mongoose's `.update` method to the next `.then`
+          return article.updateOne();
+        } else {
+          // If we couldn't find a document with the matching ID
+          res.status(404).json({
+            error: {
+              name: 'DocumentNotFoundError',
+              message: 'The provided ID doesn\'t match any documents'
+            }
+          });
+        }
+      })
+      .then((article) => {
+        // If the update succeeded, return 204 and no JSON
+        res.status(201).json({article: article});
+      })
+      // Catch any errors that might occur
+      .catch((error) => {
+        res.status(500).json({ error: error });
+      });
+  });
 
 
 /**
