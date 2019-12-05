@@ -4,12 +4,20 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 
+// requir route files
+const indexRouter = require('./app/routes/index');
+
+
 // instantiate Express Application Object
 const app = express();
+
 
 //defind port for api to run on
 
 const port = process.env.PORT || 5000; //comes from nodejs if exist run else run locally
+
+/** Routes ***/
+app.use(indexRouter);
 
 // start the serever to listen for requests on a give port
 app.listen(port, ()=>{
